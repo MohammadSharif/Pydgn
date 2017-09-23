@@ -5,6 +5,7 @@ import play.mvc.*;
 import play.data.Form;
 import play.data.FormFactory;
 import models.Message;
+import models.User;
 
 public class MessageController extends Controller {
 	@Inject FormFactory formFactory;

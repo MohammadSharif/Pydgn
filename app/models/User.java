@@ -1,10 +1,12 @@
+package models;
+
 /**
  * Created by Momo on 9/23/17
  */
 
 import java.util.*;
 
-public static class User {
+public class User {
   private String userName;
   private String serviceType;
 
