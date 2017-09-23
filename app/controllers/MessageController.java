@@ -21,6 +21,9 @@ public class MessageController extends Controller {
 		String message = form.get().message;
 		String userName = mP.extractUserName(message);
 		String extractedMessage = mP.extractMessage(message);
+		if(userName == null) {
+			return badRequest("Invalid username specified");
+		}
 		if (extractedMessage == null) {
 			return badRequest("No message");
 		}
@@ -36,7 +39,7 @@ public class MessageController extends Controller {
 		 * @return the username the message is directed to
 		 */
 		public String extractUserName(String message){
-		  String userName = message.substring(1, message.indexOf(" "));
+		  String userName = message.substring(0, 1).equals("@") ? message.substring(1, message.indexOf(" ")) : null;
 		  return userName;
 		}
 
@@ -54,6 +57,23 @@ public class MessageController extends Controller {
 
 		public boolean messageEnded(String message){
 		  return message.contains("/end");
+		}
+	}
+
+	private static class UserCreator{
+		String name;
+		String service;
+
+		public void setName(String name){
+			this.name = name;
+		}
+
+		public void setService(String service){
+			this.service = service;
+		}
+		
+		public User createUser(String name, String service){
+			return new User(this.name, this.service);
 		}
 	}
 }
