@@ -17,17 +17,17 @@ import exceptions.UserAlreadyExistsException;
 import util.DatabaseClient;
 
 public class User {
-  private String userName;
-  private String serviceType;
-
+  private String userName, serviceType, conversationID;
+  
   public User() {}
 
-  public User(String userName, String serviceType){
+  public User(String userName, String serviceType, String conversationID) {
     this.userName = userName;
     this.serviceType = serviceType;
+	this.conversationID = conversationID;
   }
 
-  public String getUserName(){
+  public String getUserName() {
     return this.userName;
   }
 
@@ -35,12 +35,20 @@ public class User {
 	this.userName = userName;
   }
 
-  public String getServiceType(){
+  public String getServiceType() {
     return this.serviceType;
   }
 
   public void setServiceType(String serviceType) {
 	this.serviceType = serviceType;
+  }
+
+  public String getConversationID() {
+	return this.conversationID;
+  }
+
+  public void setConversationID(String conversationID) {
+	this.conversationID = conversationID;
   }
 
   public static class UserClient extends DatabaseClient {
@@ -55,7 +63,7 @@ public class User {
 			return null;
 		}
 		DBObject object = cursor.next();
-		return new User(object.get("userName").toString(), object.get("serviceType").toString());
+		return new User(object.get("userName").toString(), object.get("serviceType").toString(), object.get("conversationID").toString());
 	}	
 
 	public void saveUser(User user) throws UserAlreadyExistsException {
@@ -67,6 +75,7 @@ public class User {
 		BasicDBObject document = new BasicDBObject();
 		document.put("userName", user.userName);
 		document.put("serviceType", user.serviceType);
+		document.put("conversationID", user.conversationID);
 		collection.insert(document);
 	}	
   }

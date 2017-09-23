@@ -71,21 +71,4 @@ public class MessageController extends Controller {
 		  return message.contains("/end");
 		}
 	}
-
-	private static class UserCreator{
-		String name;
-		String service;
-
-		public void setName(String name){
-			this.name = name;
-		}
-
-		public void setService(String service){
-			this.service = service;
-		}
-		
-		public User createUser(String name, String service){
-			return new User(this.name, this.service);
-		}
-	}
 }
