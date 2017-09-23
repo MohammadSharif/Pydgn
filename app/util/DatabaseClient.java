@@ -24,7 +24,7 @@ public abstract class DatabaseClient {
 	
 		List<MongoCredential> credentials = new ArrayList<MongoCredential>();
 		credentials.add(MongoCredential.createCredential(userName, database, password.toCharArray()));	
-	   	MongoClient mongoClient = new MongoClient(new ServerAddress(hostName, port));
+	   	MongoClient mongoClient = new MongoClient(new ServerAddress(hostName, port), credentials);
 		return mongoClient.getDB(database);
   }
 }
