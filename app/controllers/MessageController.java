@@ -1,16 +1,20 @@
 package controllers;
 
 import javax.inject.*;
+import java.net.URLDecoder;
 import play.mvc.*;
 import play.data.Form;
 import play.data.FormFactory;
 import models.Message;
 import models.User;
+import models.ParsedMessage;
+
+import java.io.UnsupportedEncodingException;
 
 public class MessageController extends Controller {
 	@Inject FormFactory formFactory;
 
-	public Result parseMessage() {
+	public Result parseMessage() throws UnsupportedEncodingException {
 		// Get the POST data
 		Form<Message> form = formFactory.form(Message.class).bindFromRequest();
 
@@ -19,7 +23,7 @@ public class MessageController extends Controller {
 		}
 
 		MessageParser mP = new MessageParser();
-		String message = form.get().message;
+		String message = URLDecoder.decode(form.get().getMessage(), "UTF-8");
 		String userName = mP.extractUserName(message);
 		String extractedMessage = mP.extractMessage(message);
 		if(userName == null) {
@@ -28,6 +32,9 @@ public class MessageController extends Controller {
 		if (extractedMessage == null) {
 			return badRequest("No message");
 		}
+		ParsedMessage.ParsedMessageClient client = new ParsedMessage.ParsedMessageClient();
+		ParsedMessage parsedMessage = new ParsedMessage(userName, extractedMessage);
+		client.saveMessage(parsedMessage);
 		return ok(extractedMessage);
 	}
 
