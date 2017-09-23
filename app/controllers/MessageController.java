@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import play.mvc.*;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.Json;
 import models.Message;
 import models.User;
 import models.ParsedMessage;
@@ -25,17 +26,20 @@ public class MessageController extends Controller {
 		MessageParser mP = new MessageParser();
 		String message = URLDecoder.decode(form.get().getMessage(), "UTF-8");
 		String userName = mP.extractUserName(message);
-		String extractedMessage = mP.extractMessage(message);
+		String extractedMessage = mP.extractMessage(message).trim();
 		if(userName == null) {
 			return badRequest("Invalid username specified");
 		}
 		if (extractedMessage == null) {
 			return badRequest("No message");
 		}
-		ParsedMessage.ParsedMessageClient client = new ParsedMessage.ParsedMessageClient();
-		ParsedMessage parsedMessage = new ParsedMessage(userName, extractedMessage);
-		client.saveMessage(parsedMessage);
-		return ok(extractedMessage);
+		User.UserClient client = new User.UserClient();
+		User toUser = client.getUserByUsername(userName);
+	   if (toUser == null) {
+			return badRequest("User doesn't exist");
+	   }	   
+		ParsedMessage parsedMessage = new ParsedMessage(toUser, extractedMessage);
+		return ok(Json.toJson(parsedMessage));
 	}
 
 	private static class MessageParser {

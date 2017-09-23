@@ -1,29 +1,27 @@
 package models;
 
-import com.mongodb.Mongo;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.DBCursor;
-import util.DatabaseClient;
-
 public class ParsedMessage {
-	String toUser, parsedMessage;
+	String parsedMessage;
+	User toUser;
 
-	public ParsedMessage(String toUser, String parsedMessage) {
+	public ParsedMessage(User toUser, String parsedMessage) {
 		this.toUser = toUser;
 		this.parsedMessage = parsedMessage;
 	}
 
-	public static class ParsedMessageClient extends DatabaseClient {
-		private static final String COLLECTION_NAME = "parsedMessages";
-		public static void saveMessage(ParsedMessage parsedMessage) {
-			DBCollection collection = db.getCollection(COLLECTION_NAME);
-			BasicDBObject document = new BasicDBObject();
-			document.put("parsedMessage", parsedMessage.parsedMessage);
-			document.put("toUser", parsedMessage.toUser);
-			collection.insert(document);
-		}	
+	public User getToUser() {
+		return toUser;
+	}
+
+	public void setToUser(User user) {
+		this.toUser = user;
+	}
+
+	public String getParsedMessage() {
+		return parsedMessage;
+	}
+
+	public void setParsedMessage(String parsedMessage) {
+		this.parsedMessage = parsedMessage;
 	}
 }	
