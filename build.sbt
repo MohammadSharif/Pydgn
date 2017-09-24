@@ -11,3 +11,4 @@ libraryDependencies += guice
 libraryDependencies ++= Seq(
     "org.mongodb" % "mongodb-driver" % "3.0.4"
 )
+libraryDependencies += "org.webjars" % "bootstrap" % "3.3.6"
