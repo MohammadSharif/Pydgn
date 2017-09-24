@@ -24,7 +24,8 @@ public class MessageController extends Controller {
 		}
 
 		MessageParser mP = new MessageParser();
-		String message = URLDecoder.decode(form.get().getMessage(), "UTF-8");
+		Message sentMessage = form.get();
+		String message = URLDecoder.decode(sentMessage.getMessage(), "UTF-8");
 		String userName = mP.extractUserName(message);
 		String extractedMessage = mP.extractMessage(message).trim();
 		if(userName == null) {
@@ -34,11 +35,15 @@ public class MessageController extends Controller {
 			return badRequest("No message");
 		}
 		User.UserClient client = new User.UserClient();
+		User fromUser = client.getUserBySession(sentMessage.getSenderSession());
 		User toUser = client.getUserByUsername(userName);
-	   if (toUser == null) {
+		if (fromUser == null) {
+			return badRequest("Invalid sender");
+		}
+	    if (toUser == null) {
 			return badRequest("User doesn't exist");
-	   }	   
-		ParsedMessage parsedMessage = new ParsedMessage(toUser, extractedMessage);
+	    }	   
+		ParsedMessage parsedMessage = new ParsedMessage(fromUser, toUser, extractedMessage);
 		return ok(Json.toJson(parsedMessage));
 	}
 

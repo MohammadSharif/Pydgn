@@ -66,6 +66,18 @@ public class User {
 		return new User(object.get("userName").toString(), object.get("serviceType").toString(), object.get("conversationID").toString());
 	}	
 
+	public User getUserBySession(String sessionID) {
+		DBCollection collection = db.getCollection(COLLECTION_NAME);
+		BasicDBObject query = new BasicDBObject();
+		query.put("conversationID", sessionID);
+		DBCursor cursor = collection.find(query);
+		if (!cursor.hasNext()) {
+			return null;
+		}
+		DBObject object = cursor.next();
+		return new User(object.get("userName").toString(), object.get("serviceType").toString(), object.get("conversationID").toString());
+	}
+
 	public void saveUser(User user) throws UserAlreadyExistsException {
 		if (getUserByUsername(user.userName) != null) {
 			UserAlreadyExistsException down = new UserAlreadyExistsException();

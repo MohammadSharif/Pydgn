@@ -2,11 +2,20 @@ package models;
 
 public class ParsedMessage {
 	String parsedMessage;
-	User toUser;
+	User fromUser, toUser;
 
-	public ParsedMessage(User toUser, String parsedMessage) {
+	public ParsedMessage(User fromUser, User toUser, String parsedMessage) {
+		this.fromUser = fromUser;
 		this.toUser = toUser;
 		this.parsedMessage = parsedMessage;
+	}
+
+	public User getFromUser() {
+		return fromUser;
+	}
+
+	public void setFromUser(User fromUser) {
+		this.fromUser = fromUser;
 	}
 
 	public User getToUser() {

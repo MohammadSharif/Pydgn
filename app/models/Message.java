@@ -2,6 +2,15 @@ package models;
 
 public class Message {
 	public String message;
+	public String senderSession;
+
+	public void setSenderSession(String senderSession) {
+		this.senderSession = senderSession;
+	}
+
+	public String getSenderSession() {
+		return this.senderSession;
+	}
 
 	public void setMessage(String message) {
 		this.message = message;
